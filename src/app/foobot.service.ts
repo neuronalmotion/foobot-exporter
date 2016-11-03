@@ -9,7 +9,7 @@ import { Device } from './device';
 @Injectable()
 export class FoobotService {
 
-  private baseUrl = 'https://api.foobot.io/v2';
+  private baseUrl = 'http://localhost:8001';
 
   constructor(private http: Http) { }
 
@@ -17,15 +17,15 @@ export class FoobotService {
     const secretKey = '';
     const username = '';
     const headers = new Headers({
-      'Content-Type': 'application/json',
-      'X-API-KEY-TOKEN': secretKey
+      'Content-Type': 'application/json'
+      //'X-API-KEY-TOKEN': secretKey
     });
-    const url = `${this.baseUrl}/owner/${username}/device/`;
+    const url = `${this.baseUrl}/devices/`;
     console.log(url);
 
     return this.http.get(url, {headers: headers})
       .toPromise()
-      .then(response => response.json().data as Device[])
+      .then(response => response.json() as Device[])
       .catch(this.handleError)
   }
 
