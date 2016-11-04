@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Headers, Http, Response } from '@angular/http';
+import { Headers, Http, Response, RequestOptions, ResponseContentType } from '@angular/http';
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/toPromise';
+import 'rxjs/Rx';
 
 import { Device } from './device';
 
@@ -34,6 +35,32 @@ export class FoobotService {
     return this.http.get(url, {headers: headers})
       .toPromise()
       .then(response => response.json() as Device[])
+      .catch(this.handleError)
+  }
+
+  getDatapoints(uuid, period, averageBy) {
+    const secretKey = '';
+    const username = encodeURIComponent(this.username);
+
+    const headers = new Headers({
+      'responseType': 'blob',
+      'Content-Type': 'application/json',
+      'X-Api-Key-Token': this.secretKey
+    });
+
+    const options = new RequestOptions({
+      headers: headers,
+      responseType: ResponseContentType.Blob
+    });
+
+    const url = `${this.baseUrl}/devices/${uuid}/datapoints/${period}/last/${averageBy}/`;
+    console.log(url);
+
+    return this.http.get(url, options)
+      .map(response => {
+        console.log(response.blob());
+        return response.blob();
+      })
       .catch(this.handleError)
   }
 
