@@ -9,18 +9,26 @@ import { Device } from './device';
 @Injectable()
 export class FoobotService {
 
-  private baseUrl = 'http://localhost:8001';
+  private baseUrl = 'http://localhost:8001/api';
+  private username : string;
+  private secretKey : string;
 
   constructor(private http: Http) { }
 
+
+  setCredentials(username, secretKey): void {
+    this.username = username;
+    this.secretKey = secretKey;
+  }
+
   getDevices(): Promise<Device[]> {
     const secretKey = '';
-    const username = '';
+    const username = encodeURIComponent(this.username);
     const headers = new Headers({
-      'Content-Type': 'application/json'
-      //'X-API-KEY-TOKEN': secretKey
+      'Content-Type': 'application/json',
+      'X-Api-Key-Token': this.secretKey
     });
-    const url = `${this.baseUrl}/devices/`;
+    const url = `${this.baseUrl}/owners/${username}/devices/`;
     console.log(url);
 
     return this.http.get(url, {headers: headers})

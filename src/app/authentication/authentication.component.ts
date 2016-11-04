@@ -9,15 +9,19 @@ import { FoobotService } from '../foobot.service';
 })
 export class AuthenticationComponent implements OnInit {
 
+  username : string;
+  secretKey : string;
+
   constructor(private foobotService: FoobotService) { }
 
   ngOnInit() {
   }
 
   onStart(): void {
-    console.log("onStart!!!");
+    console.log("username:" + this.username + "  " + "secretKey:" + this.secretKey);
+
+    this.foobotService.setCredentials(this.username, this.secretKey);
     this.foobotService.getDevices()
       .then(devices => console.log(devices));
   }
-
 }
