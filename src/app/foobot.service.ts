@@ -6,6 +6,7 @@ import 'rxjs/add/operator/toPromise';
 import 'rxjs/Rx';
 
 import { Device } from './device';
+import { DEVICES } from './mock-devices'
 
 @Injectable()
 export class FoobotService {
@@ -20,6 +21,10 @@ export class FoobotService {
   setCredentials(username, secretKey): void {
     this.username = username;
     this.secretKey = secretKey;
+  }
+
+  getDevicesMock(): Promise<Device[]> {
+    return Promise.resolve(DEVICES);
   }
 
   getDevices(): Promise<Device[]> {

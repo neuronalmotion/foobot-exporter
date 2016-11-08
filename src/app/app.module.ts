@@ -9,13 +9,15 @@ import { AppComponent } from './app.component';
 import { AuthenticationComponent } from './authentication/authentication.component';
 import { FoobotService } from './foobot.service';
 import { DatapointComponent } from './datapoint/datapoint.component';
+import { DevicesComponent } from './devices/devices.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     AuthenticationComponent,
     DatapointComponent,
-    DatePicker
+    DatePicker,
+    DevicesComponent
   ],
   imports: [
     BrowserModule,
