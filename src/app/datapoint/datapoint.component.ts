@@ -2,6 +2,8 @@ import { Component, Input, OnInit } from '@angular/core';
 
 import { FoobotService } from '../foobot.service';
 import { Device } from '../device';
+import { FileFormat } from '../file-format';
+import { FILEFORMATS } from '../file-format'
 
 @Component({
   selector: 'app-datapoint',
@@ -12,8 +14,13 @@ export class DatapointComponent implements OnInit {
 
   @Input() device: Device;
   startDate : string;
+  fileformats : FileFormat[];
+  selectedFileformat: FileFormat;
 
-  constructor(private foobotService: FoobotService) { }
+  constructor(private foobotService: FoobotService) {
+    this.fileformats = FILEFORMATS;
+    this.selectedFileformat = this.fileformats[0];
+  }
 
   ngOnInit() {
   }
@@ -32,20 +39,24 @@ export class DatapointComponent implements OnInit {
 	let reader = new FileReader();
 	  	this.foobotService.getDatapoints(uuid,
   		period,
-  		averageBy)
+  		averageBy,
+      this.selectedFileformat.mime)
   		.subscribe(blob => {
   			let link = document.createElement('a');
   			//link.style = 'display: none;';
   			document.body.appendChild(link);
   			let url = window.URL.createObjectURL(blob);
   			link.href = url;
-  			link.download = 'footbot.json';
+  			link.download = 'footbot-data' + this.selectedFileformat.extension;
   			link.click();
   			window.URL.revokeObjectURL(url);
 
   		},
-                  error => console.log("Error downloading the file."),
-                  () => console.log('Completed file download.'));
+        error => console.log("Error downloading the file."),
+        () => console.log('Completed file download.'));
+  }
 
+  onFileFormatSelected(fileformat: FileFormat): void {
+    this.selectedFileformat = fileformat;
   }
 }

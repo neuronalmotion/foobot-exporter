@@ -1,10 +1,8 @@
 <h3>Export</h3>
-
 <div class="form-group">
 	<div>
 		<label>From</label>
 	</div>
-
 	<div class="row">
 		<div class="col-sm-12">
 			<datepicker class="success"
@@ -14,15 +12,24 @@
 			</datepicker>
 		</div>
 	</div>
-
 	<div>
 		<label>To</label>
 	</div>
-
 	<div class="date">
 		<label >Now</label>
 	</div>
-
+	<div>
+		<label >File format</label>
+	</div>
+	<div>
+		<button *ngFor="let fileformat of fileformats"
+			type="button"
+			class="fileformat btn"
+			[class.selected]="fileformat === selectedFileformat"
+			(click)="onFileFormatSelected(fileformat)">
+			{{fileformat.name}}
+		</button>
+	</div>
 	<br>
 	<div>
 		<button type="button" class="btn btn-success" (click)="onDownload()">Download</button>

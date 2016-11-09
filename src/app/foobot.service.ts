@@ -43,13 +43,13 @@ export class FoobotService {
       .catch(this.handleError)
   }
 
-  getDatapoints(uuid, period, averageBy) {
+  getDatapoints(uuid, period, averageBy, fileformat='application/json') {
     const secretKey = '';
     const username = encodeURIComponent(this.username);
 
     const headers = new Headers({
       'responseType': 'blob',
-      'Content-Type': 'application/json',
+      'Accept': fileformat,
       'X-Api-Key-Token': this.secretKey
     });
 

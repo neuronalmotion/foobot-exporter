@@ -9,3 +9,22 @@
 .date > label {
 	font-size: 15pt;
 }
+.fileformat {
+	margin: 0 2% 0 0;
+	width: 80px;
+}
+.fileformat {
+	margin: 0 2% 0 0;
+	width: 80px;
+}
+.fileformat:hover {
+	color: #607D8B;
+	background-color: #DDD;
+}
+.fileformat.selected {
+  color: #FFFFFF;
+  background-color: #5cb85c;
+}
+.fileformat.selected:hover {
+	background-color: #8dd48d !important;
+}
