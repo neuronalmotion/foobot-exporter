@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 import { FoobotService } from '../foobot.service';
+import { Device } from '../device';
 
 @Component({
   selector: 'app-datapoint',
@@ -9,6 +10,7 @@ import { FoobotService } from '../foobot.service';
 })
 export class DatapointComponent implements OnInit {
 
+  @Input() device: Device;
   startDate : string;
 
   constructor(private foobotService: FoobotService) { }
@@ -24,7 +26,8 @@ export class DatapointComponent implements OnInit {
   	let averageBy = 3600;
   	
   	// FIXME: provide the UUID from devices component
-  	let uuid = '';
+    let uuid = this.device.uuid;
+    console.log('Request download on uuid: ' + uuid);
 
 	let reader = new FileReader();
 	  	this.foobotService.getDatapoints(uuid,

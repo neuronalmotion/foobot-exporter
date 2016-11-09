@@ -1,9 +1,11 @@
-<h3>Your devices</h3>
+<h3>Devices</h3>
 
-<ul class="devices">
+<label for="devices">Your footbot</label>
+<ul id="devices" class="devices">
 	<li *ngFor="let device of devices"
 		[class.selected]="device === selectedDevice"
 		(click)="onSelect(device)">
 		<span class="badge"></span> {{device.name}}
 	</li>
-</ul>	
+</ul>
+<app-datapoint [device]="selectedDevice"></app-datapoint>

@@ -14,7 +14,6 @@ export class AuthenticationComponent implements OnInit {
   secretKey : string;
   devices : Device[];
 
-
   constructor(private foobotService: FoobotService) { }
 
   ngOnInit() {
@@ -25,7 +24,7 @@ export class AuthenticationComponent implements OnInit {
 
     this.foobotService.setCredentials(this.username, this.secretKey);
 
-    this.foobotService.getDevicesMock()
+    this.foobotService.getDevices()
     .then(devices => this.devices = devices);
   }
 }
