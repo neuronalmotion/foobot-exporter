@@ -14,17 +14,20 @@ export class AuthenticationComponent implements OnInit {
   secretKey : string;
   devices : Device[];
 
-  constructor(private foobotService: FoobotService) { }
+  constructor(private foobotService: FoobotService) {
+    this.username = localStorage.getItem('username');
+    this.secretKey = localStorage.getItem('secretKey');
+  }
 
   ngOnInit() {
   }
 
-  onStart(): void {
-    console.log("username:" + this.username + "  " + "secretKey:" + this.secretKey);
+  onConnect(): void {
+    localStorage.setItem('username', this.username);
+    localStorage.setItem('secretKey', this.secretKey);
 
     this.foobotService.setCredentials(this.username, this.secretKey);
-
     this.foobotService.getDevices()
-    .then(devices => this.devices = devices);
+        .then(devices => this.devices = devices);
   }
 }
