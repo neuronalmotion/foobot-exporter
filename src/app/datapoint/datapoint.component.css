@@ -1,0 +1,11 @@
+.date {
+	border: 1px solid #aec9de;
+    border-radius: 10px;
+    width: 170px;
+    height: 40px;
+    text-align: center;
+    margin: 0 10px 0 0;
+}
+.date > label {
+	font-size: 15pt;
+}

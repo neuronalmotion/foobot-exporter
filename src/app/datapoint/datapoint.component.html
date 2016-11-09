@@ -1,12 +1,31 @@
 <h3>Export</h3>
 
 <div class="form-group">
-	<label for="startDate">Start date</label>
-	<datepicker class="success"
-				id="startDate"
-				[(ngModel)]="startDate" 
-				[expanded]="true">
-	</datepicker>
-	<button type="button" class="btn btn-success" (click)="onDownload()">Download .CSV</button>
+	<div>
+		<label>From</label>
+	</div>
+
+	<div class="row">
+		<div class="col-sm-12">
+			<datepicker class="success"
+						id="startDate"
+						[(ngModel)]="startDate" 
+						[expanded]="true">
+			</datepicker>
+		</div>
+	</div>
+
+	<div>
+		<label>To</label>
+	</div>
+
+	<div class="date">
+		<label >Now</label>
+	</div>
+
+	<br>
+	<div>
+		<button type="button" class="btn btn-success" (click)="onDownload()">Download</button>
+	</div>
 </div>
 
