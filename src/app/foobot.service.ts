@@ -7,15 +7,18 @@ import 'rxjs/Rx';
 
 import { Device } from './device';
 import { DEVICES } from './mock-devices'
+import { environment } from '../environments/environment'
 
 @Injectable()
 export class FoobotService {
 
-  private baseUrl = 'http://localhost:8001/api';
+  private baseUrl : string;
   private username : string;
   private secretKey : string;
 
-  constructor(private http: Http) { }
+  constructor(private http: Http) {
+      this.baseUrl = environment.baseUrl;
+  }
 
 
   setCredentials(username, secretKey): void {

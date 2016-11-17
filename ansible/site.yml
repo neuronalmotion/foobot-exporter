@@ -1,0 +1,21 @@
+---
+- hosts: foobot-exporter.neuronalmotion.com
+  vars:
+      project_root: /srv/www/foobot-exporter
+      webapp_root: "{{ project_root }}/webapp"
+      base_url: http://foobot-exporter.neuronalmotion.com
+
+  tasks:
+      - name: compile project
+        local_action: command ng build --prod --base-href /app/
+
+      - name: create webapp directory structure
+        file: path={{ webapp_root }} state=directory
+
+      - name: deploy project
+        synchronize:
+            src=../dist/
+            dest={{ webapp_root }}
+            delete=yes
+            recursive=yes
+
