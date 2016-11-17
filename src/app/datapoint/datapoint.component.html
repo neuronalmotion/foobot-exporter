@@ -1,27 +1,31 @@
 <h3>Export</h3>
-<div class="form-group">
-	<div>
-		<label>From</label>
-	</div>
-	<div class="row">
-		<div class="col-sm-12">
-			<datepicker class="success"
-						id="startDate"
-						[(ngModel)]="startDate" 
-						[expanded]="true">
-			</datepicker>
-		</div>
-	</div>
-	<div>
-		<label>To</label>
-	</div>
-	<div class="date">
-		<label >Now</label>
-	</div>
-	<div>
-		<label >File format</label>
-	</div>
-	<div>
+<hr />
+
+<div class="form-group row">
+    <label class="col-xs-2 col-form-label">Date range</label>
+    <div class="col-xs-10 form-inline">
+        <div class="form-group">
+            <label for="startDate">From</label>
+            <div class="form-control no-border">
+                <datepicker class="success"
+                            id="startDate"
+                            [(ngModel)]="startDate"
+                            [expanded]="true">
+                </datepicker>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="nowDate">To</label>
+            <div class="form-control date">
+                <label >Now</label>
+            </div>
+        </div>
+    </div> <!-- form-inline -->
+</div> <!-- form-group -->
+
+<div class="form-group row">
+    <label class="col-xs-2 col-form-label">File format</label>
+    <div class="col-xs-10">
 		<button *ngFor="let fileformat of fileformats"
 			type="button"
 			class="fileformat btn"
@@ -30,9 +34,11 @@
 			{{fileformat.name}}
 		</button>
 	</div>
-	<br>
-	<div>
-		<button type="button" class="btn btn-success" (click)="onDownload()">Download</button>
-	</div>
+</div> <!-- form-group -->
+
+<div class="form-group row">
+    <div class="offset-sm-2 col-sm-10">
+        <button type="button" class="btn btn-primary" (click)="onDownload()">Download Data</button>
+    </div>
 </div>
 

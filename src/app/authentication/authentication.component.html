@@ -1,24 +1,34 @@
 <h3>Authentification</h3>
+<hr />
 
-<div class="form-group">
-
-  <label for="username">Your username</label>
-  <input id ="username"
-    	 [(ngModel)]="username"
-  		 type="text"
-  		 class="form-control"
-  		 placeholder="e.g John Doe" />
-
-
-  <label for="secretKey">Your Secret Key</label>
-  <input id="secretKey"
-         [(ngModel)]="secretKey"
+<div class="form-group row">
+    <label for="username" class="col-xs-2 col-form-label">Your Username</label>
+    <div class="col-xs-10">
+        <input id ="username"
+         [(ngModel)]="username"
          type="text"
          class="form-control"
-         aria-describedby="secretKeyHelp"
-         placeholder="e.g. GD23DQJDB987AAB_K534" />
-  <small id="secretKeyHelp" class="form-text text-muted">We'll never share your uname and secret key with anyone. We don't store it.</small>
-
-  <button type="button" class="btn btn-success" (click)="onConnect()">Connect</button>
+         placeholder="e.g John Doe" />
+    </div>
 </div>
+
+<div class="form-group row">
+    <label for="secretKey" class="col-xs-2 col-form-label">Your Secret Key</label>
+    <div class="col-xs-10">
+        <input id="secretKey"
+               [(ngModel)]="secretKey"
+               type="text"
+               class="form-control"
+               aria-describedby="secretKeyHelp"
+               placeholder="e.g. GD23DQJDB987AAB_K534" />
+        <small id="secretKeyHelp" class="form-text text-muted">We'll never share your username and secret key with anyone. We don't store anything.</small>
+    </div>
+</div>
+
+<div class="form-group row">
+    <div class="offset-sm-2 col-sm-10">
+        <button type="button" class="btn btn-primary" (click)="onConnect()">Connect</button>
+    </div>
+</div>
+
 <app-devices [devices]="devices"></app-devices>
