@@ -10,9 +10,9 @@ import { Device } from '../device';
 })
 export class AuthenticationComponent implements OnInit {
 
-  username : string;
-  secretKey : string;
-  devices : Device[];
+  username: string;
+  secretKey: string;
+  devices: Device[];
 
   constructor(private foobotService: FoobotService) {
     this.username = localStorage.getItem('username');
@@ -27,7 +27,5 @@ export class AuthenticationComponent implements OnInit {
     localStorage.setItem('secretKey', this.secretKey);
 
     this.foobotService.setCredentials(this.username, this.secretKey);
-    this.foobotService.getDevices()
-        .then(devices => this.devices = devices);
   }
 }

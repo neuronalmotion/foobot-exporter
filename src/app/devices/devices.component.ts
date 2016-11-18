@@ -1,25 +1,29 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
+import { FoobotService } from '../foobot.service';
 import { Device } from '../device';
 
 @Component({
-  selector: 'app-devices',
-  templateUrl: './devices.component.html',
-  styleUrls: ['./devices.component.css']
+    selector: 'app-devices',
+    templateUrl: './devices.component.html',
+    styleUrls: ['./devices.component.css']
 })
 export class DevicesComponent implements OnInit {
 
-  @Input() devices: Device[];
-  selectedDevice: Device;
+    devices: Device[];
+    selectedDevice: Device;
 
-  constructor() {
-  }
+    constructor(private foobotService: FoobotService) {
+    }
 
-  ngOnInit() {
-  }
+    ngOnInit() {
+        this.foobotService.devicesChangeEvent.subscribe(
+            devices => this.devices = devices);
+    }
 
-  onSelect(device: Device) {
-  	this.selectedDevice = device;
-  	console.log("selectedDevice is now " + this.selectedDevice.name);
-  }
+    onSelect(device: Device) {
+        this.selectedDevice = device;
+        this.foobotService.setSelectedDevice(device);
+        console.log("selectedDevice is now " + this.selectedDevice.name);
+    }
 }
