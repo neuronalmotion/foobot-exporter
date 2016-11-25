@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  baseUrl: 'http://foobot-exporter.neuronalmotion.com/api'
+  baseUrl: 'https://foobot-exporter.neuronalmotion.com/api'
 };
