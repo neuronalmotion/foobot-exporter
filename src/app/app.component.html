@@ -1,12 +1,20 @@
-<div class="text-xs-center my-3">
-    <h1>
+<nav class="navbar navbar-dark bg-primary">
+    <a class="navbar-brand" href="#">
         <i class="fa fa-leaf" aria-hidden="true"></i>&nbsp;Foobot Exporter
-    </h1>
-    <p class="text-muted">
-    Download your Foobot data to CSV/JSON in a click
-    </p>
-</div>
+    </a>
+    <ul class="nav navbar-nav">
+        <li routerLinkActive="active" class="nav-item">
+            <a class="nav-link" routerLink="/home">Home</a>
+        </li>
+        <li routerLinkActive="active" class="nav-item">
+            <a class="nav-link" routerLink="#">Contact</a>
+        </li>
+        <li routerLinkActive="active" class="nav-item">
+            <a class="nav-link" routerLink="/about">About</a>
+        </li>
+    </ul>
+</nav>
 
-<app-authentication></app-authentication>
-<app-devices></app-devices>
-<app-datapoint></app-datapoint>
+<div class="container">
+    <router-outlet></router-outlet>
+</div>
