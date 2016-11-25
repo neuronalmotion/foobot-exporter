@@ -7,7 +7,7 @@
 
   tasks:
       - name: compile project
-        local_action: command ng build --prod --base-href /app/
+        local_action: command ng build --prod
 
       - name: create webapp directory structure
         file: path={{ webapp_root }} state=directory
