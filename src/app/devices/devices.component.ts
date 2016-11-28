@@ -18,12 +18,15 @@ export class DevicesComponent implements OnInit {
 
     ngOnInit() {
         this.foobotService.devicesChangeEvent.subscribe(
-            devices => this.devices = devices);
+            devices => {
+                this.devices = devices;
+                let device = this.devices.length > 0 ? this.devices[0] : null;
+                this.onSelect(device);
+            });
     }
 
     onSelect(device: Device) {
         this.selectedDevice = device;
         this.foobotService.setSelectedDevice(device);
-        console.log("selectedDevice is now " + this.selectedDevice.name);
     }
 }
