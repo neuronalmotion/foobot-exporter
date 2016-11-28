@@ -3,7 +3,6 @@ import { Headers, Http, Response, RequestOptions, ResponseContentType } from '@a
 import { Output, EventEmitter } from '@angular/core';
 
 import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/toPromise';
 import 'rxjs/Rx';
 
 import { Device } from './device';
@@ -15,6 +14,9 @@ export class FoobotService {
 
     @Output() devicesChangeEvent: EventEmitter<Device[]> = new EventEmitter<Device[]>(true);
     @Output() selectedDeviceEvent: EventEmitter<Device> = new EventEmitter<Device>(true);
+    @Output() datapointsEvent: EventEmitter<Blob> = new EventEmitter<Blob>(true);
+    @Output() errorEvent: EventEmitter<string> = new EventEmitter<string>(true);
+    @Output() hideErrorEvent: EventEmitter<any> = new EventEmitter<any>(true);
 
     private baseUrl: string;
     private username: string;
@@ -30,14 +32,20 @@ export class FoobotService {
         this.secretKey = secretKey;
 
         this.getDevices()
-            .then(devices => this.devicesChangeEvent.emit(devices));
+            .subscribe(
+                devices => {
+                    this.devicesChangeEvent.emit(devices);
+                    this.hideErrorEvent.emit(null);
+                },
+                error => this.handleError('Could not authentication you', error)
+            );
     }
 
-    getDevicesMock(): Promise<Device[]> {
-        return Promise.resolve(DEVICES);
+    getDevicesMock(): Observable<Device[]> {
+        return Observable.of(DEVICES);
     }
 
-    getDevices(): Promise<Device[]> {
+    getDevices(): Observable<Device[]> {
         const secretKey = '';
         const username = encodeURIComponent(this.username);
         const headers = new Headers({
@@ -48,12 +56,15 @@ export class FoobotService {
         console.log(url);
 
         return this.http.get(url, {headers: headers})
-        .toPromise()
-        .then(response => response.json() as Device[])
-        .catch(this.handleError)
+            .map(response => response.json() as Device[])
     }
 
-    getDatapoints(uuid, period, averageBy, fileformat='application/json') {
+    loadDatapoints(uuid, period, averageBy, fileformat='application/json') {
+        console.log(uuid);
+        if (!uuid) {
+            this.handleError('Could not load datapoints', 'no device is selected');
+            return;
+        }
         const secretKey = '';
         const username = encodeURIComponent(this.username);
 
@@ -71,12 +82,15 @@ export class FoobotService {
         const url = `${this.baseUrl}/devices/${uuid}/datapoints/${period}/last/${averageBy}/`;
         console.log(url);
 
-        return this.http.get(url, options)
-        .map(response => {
-            console.log(response.blob());
-            return response.blob();
-        })
-        .catch(this.handleError)
+        this.http.get(url, options)
+            .map(response => response.blob())
+            .subscribe(
+                blob => {
+                    this.datapointsEvent.emit(blob);
+                    this.hideErrorEvent.emit(null);
+                },
+                err => this.handleError('Could not load datapoints', err)
+            );
     }
 
     setSelectedDevice(device: Device): void {
@@ -84,9 +98,39 @@ export class FoobotService {
         this.selectedDeviceEvent.emit(device);
     }
 
-    private handleError(error: any): Promise<any> {
-        console.error('An error occured', error);
-        return Promise.reject(error.message || error);
+    private handleError(actionMsg: string, error: Response | any): void {
+        let errMsg: string;
+        console.log(error);
+        if (error instanceof Response) {
+            let message: string;
+            console.log(error.status);
+
+            switch(error.status) {
+                case 0:
+                    message = 'foobot-exporter is unreachable. Try again in a few minutes';
+                break;
+
+                case 403:
+                    message = 'invalid credentials, check your <strong>Username</strong> and <strong>Secrey Key</strong>';
+                break;
+
+                case 404:
+                    message = 'resource not found';
+                break;
+
+                case 500:
+                    message = 'something went wrong with foobot-exporter. Please contact us so we can fix this!'
+                break;
+
+                default:
+                    message = error.statusText || '';
+                break;
+            }
+            errMsg = `${actionMsg}: ${message}`;
+        } else {
+            errMsg = `${actionMsg}: ${error}`;
+        }
+        this.errorEvent.emit(errMsg);
     }
 
 }

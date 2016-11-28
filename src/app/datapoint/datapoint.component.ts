@@ -25,6 +25,9 @@ export class DatapointComponent implements OnInit {
     ngOnInit() {
         this.foobotService.selectedDeviceEvent.subscribe(
             device => this.device = device);
+
+        this.foobotService.datapointsEvent.subscribe(
+            blob => this.generateDownloadLink(blob));
     }
 
     onDownload(): void {
@@ -34,28 +37,24 @@ export class DatapointComponent implements OnInit {
         let period = Math.round((now - date) / 1000);
         let averageBy = 3600;
 
-        // FIXME: provide the UUID from devices component
-        let uuid = this.device.uuid;
-        console.log('Request download on uuid: ' + uuid);
+        let uuid = this.device ? this.device.uuid : '';
 
-        let reader = new FileReader();
-        this.foobotService.getDatapoints(
+        this.foobotService.loadDatapoints(
             uuid,
             period,
             averageBy,
-            this.selectedFileformat.mime)
-            .subscribe(blob => {
-                let link = document.createElement('a');
-                document.body.appendChild(link);
-                let url = window.URL.createObjectURL(blob);
-                link.href = url;
-                link.download = 'footbot-data' + this.selectedFileformat.extension;
-                link.click();
-                window.URL.revokeObjectURL(url);
+            this.selectedFileformat.mime
+        );
+    }
 
-            },
-            error => console.log("Error downloading the file."),
-                () => console.log('Completed file download.'));
+    generateDownloadLink(blob: Blob) : void {
+        let link = document.createElement('a');
+        document.body.appendChild(link);
+        let url = window.URL.createObjectURL(blob);
+        link.href = url;
+        link.download = 'footbot-data' + this.selectedFileformat.extension;
+        link.click();
+        window.URL.revokeObjectURL(url);
     }
 
     onFileFormatSelected(fileformat: FileFormat): void {
