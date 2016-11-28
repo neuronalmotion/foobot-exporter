@@ -41,10 +41,9 @@ export class FoobotService {
             );
     }
 
-    // FIXME repair Mock with Observable
-    //getDevicesMock(): Promise<Device[]> {
-        //return Promise.resolve(DEVICES);
-    //}
+    getDevicesMock(): Observable<Device[]> {
+        return Observable.of(DEVICES);
+    }
 
     getDevices(): Observable<Device[]> {
         const secretKey = '';
