@@ -1,0 +1,27 @@
+.devices {
+	margin: 0 0 2em 0;
+	list-style-type: none;
+	padding: 0;
+	width: 15em;
+}
+.devices li {
+	cursor: pointer;
+	position: relative;
+	left: 0;
+	color: #607D8B;
+	background-color: #EEE;
+	margin: 1em;
+	padding: .5em;
+	border-radius: 4px;
+}
+.devices li:hover {
+	color: #607D8B;
+	background-color: #DDD;
+}
+.devices li.selected {
+  color: #FFFFFF;
+  background-color: #5cb85c;
+}
+.devices li.selected:hover {
+	background-color: #8dd48d !important;
+}

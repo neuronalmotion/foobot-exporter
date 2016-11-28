@@ -1,0 +1,11 @@
+<h3>Devices</h3>
+<hr />
+
+<label for="devices">Select a footbot</label>
+<ul id="devices" class="devices">
+	<li *ngFor="let device of devices"
+		[class.selected]="device === selectedDevice"
+		(click)="onSelect(device)">
+		<span class="badge"></span> {{device.name}}
+	</li>
+</ul>

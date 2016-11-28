@@ -1,0 +1,37 @@
+<h3>Authentification</h3>
+<hr />
+
+<div class="form-group row">
+    <label for="username" class="col-xs-2 col-form-label">Your Username</label>
+    <div class="col-xs-10">
+        <input id ="username"
+         [(ngModel)]="username"
+         type="text"
+         class="form-control"
+         placeholder="e.g John Doe" />
+    </div>
+</div>
+
+<div class="form-group row">
+    <label for="secretKey" class="col-xs-2 col-form-label">Your API Key</label>
+    <div class="col-xs-10">
+        <input id="secretKey"
+               [(ngModel)]="secretKey"
+               type="text"
+               class="form-control"
+               aria-describedby="secretKeyHelp"
+               placeholder="e.g. GD23DQJDB987AAB_K534" />
+        <small id="secretKeyHelp" class="form-text text-muted">We'll never share your username and api key with anyone. We don't store anything.</small>
+    </div>
+</div>
+
+<div class="form-group row">
+    <div class="offset-sm-2 col-sm-10">
+        <button type="button" class="btn btn-primary" (click)="onConnect()">Connect</button>
+    </div>
+</div>
+
+<div class="alert alert-info">
+    <i class="fa fa-info-circle fa-lg"></i>&nbsp;
+    Don't have a API Key yet? You can request one right now from the <a href="http://api.foobot.io/apidoc/index.html" target="_blank">official Foobot website</a>
+</div>
