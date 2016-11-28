@@ -62,7 +62,6 @@ export class FoobotService {
     loadDatapoints(uuid, period, averageBy, fileformat='application/json') {
         console.log(uuid);
         if (!uuid) {
-            console.log('DOZIAJDOZIJ');
             this.handleError('Could not load datapoints', 'no device is selected');
             return;
         }
