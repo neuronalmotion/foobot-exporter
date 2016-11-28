@@ -3,7 +3,6 @@ import { Headers, Http, Response, RequestOptions, ResponseContentType } from '@a
 import { Output, EventEmitter } from '@angular/core';
 
 import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/toPromise';
 import 'rxjs/Rx';
 
 import { Device } from './device';
@@ -30,14 +29,18 @@ export class FoobotService {
         this.secretKey = secretKey;
 
         this.getDevices()
-            .then(devices => this.devicesChangeEvent.emit(devices));
+            .subscribe(
+                devices => this.devicesChangeEvent.emit(devices),
+                error => this.handleError(error)
+            );
     }
 
-    getDevicesMock(): Promise<Device[]> {
-        return Promise.resolve(DEVICES);
-    }
+    // FIXME repair Mock with Observable
+    //getDevicesMock(): Promise<Device[]> {
+        //return Promise.resolve(DEVICES);
+    //}
 
-    getDevices(): Promise<Device[]> {
+    getDevices(): Observable<Device[]> {
         const secretKey = '';
         const username = encodeURIComponent(this.username);
         const headers = new Headers({
@@ -48,9 +51,7 @@ export class FoobotService {
         console.log(url);
 
         return this.http.get(url, {headers: headers})
-        .toPromise()
-        .then(response => response.json() as Device[])
-        .catch(this.handleError)
+            .map(response => response.json() as Device[])
     }
 
     getDatapoints(uuid, period, averageBy, fileformat='application/json') {
@@ -72,11 +73,10 @@ export class FoobotService {
         console.log(url);
 
         return this.http.get(url, options)
-        .map(response => {
-            console.log(response.blob());
-            return response.blob();
-        })
-        .catch(this.handleError)
+            .map(response => {
+                console.log(response.blob());
+                return response.blob();
+            });
     }
 
     setSelectedDevice(device: Device): void {
@@ -84,9 +84,8 @@ export class FoobotService {
         this.selectedDeviceEvent.emit(device);
     }
 
-    private handleError(error: any): Promise<any> {
+    private handleError(error: any): void {
         console.error('An error occured', error);
-        return Promise.reject(error.message || error);
     }
 
 }
