@@ -111,7 +111,7 @@ export class FoobotService {
                 break;
 
                 case 403:
-                    message = 'invalid credentials, check your <strong>Username</strong> and <strong>Secrey Key</strong>';
+                    message = 'invalid credentials, check your <strong>Username</strong> and <strong>API Key</strong>';
                 break;
 
                 case 404:
