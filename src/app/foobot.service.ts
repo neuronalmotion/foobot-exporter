@@ -14,6 +14,9 @@ export class FoobotService {
 
     @Output() devicesChangeEvent: EventEmitter<Device[]> = new EventEmitter<Device[]>(true);
     @Output() selectedDeviceEvent: EventEmitter<Device> = new EventEmitter<Device>(true);
+    @Output() datapointsEvent: EventEmitter<Blob> = new EventEmitter<Blob>(true);
+    @Output() errorEvent: EventEmitter<string> = new EventEmitter<string>(true);
+    @Output() hideErrorEvent: EventEmitter<any> = new EventEmitter<any>(true);
 
     private baseUrl: string;
     private username: string;
@@ -30,8 +33,11 @@ export class FoobotService {
 
         this.getDevices()
             .subscribe(
-                devices => this.devicesChangeEvent.emit(devices),
-                error => this.handleError(error)
+                devices => {
+                    this.devicesChangeEvent.emit(devices);
+                    this.hideErrorEvent.emit(null);
+                },
+                error => this.handleError('Could not authentication you', error)
             );
     }
 
@@ -54,7 +60,13 @@ export class FoobotService {
             .map(response => response.json() as Device[])
     }
 
-    getDatapoints(uuid, period, averageBy, fileformat='application/json') {
+    loadDatapoints(uuid, period, averageBy, fileformat='application/json') {
+        console.log(uuid);
+        if (!uuid) {
+            console.log('DOZIAJDOZIJ');
+            this.handleError('Could not load datapoints', 'no device is selected');
+            return;
+        }
         const secretKey = '';
         const username = encodeURIComponent(this.username);
 
@@ -72,11 +84,15 @@ export class FoobotService {
         const url = `${this.baseUrl}/devices/${uuid}/datapoints/${period}/last/${averageBy}/`;
         console.log(url);
 
-        return this.http.get(url, options)
-            .map(response => {
-                console.log(response.blob());
-                return response.blob();
-            });
+        this.http.get(url, options)
+            .map(response => response.blob())
+            .subscribe(
+                blob => {
+                    this.datapointsEvent.emit(blob);
+                    this.hideErrorEvent.emit(null);
+                },
+                err => this.handleError('Could not load datapoints', err)
+            );
     }
 
     setSelectedDevice(device: Device): void {
@@ -84,8 +100,39 @@ export class FoobotService {
         this.selectedDeviceEvent.emit(device);
     }
 
-    private handleError(error: any): void {
-        console.error('An error occured', error);
+    private handleError(actionMsg: string, error: Response | any): void {
+        let errMsg: string;
+        console.log(error);
+        if (error instanceof Response) {
+            let message: string;
+            console.log(error.status);
+
+            switch(error.status) {
+                case 0:
+                    message = 'foobot-exporter is unreachable. Try again in a few minutes';
+                break;
+
+                case 403:
+                    message = 'invalid credentials, check your <strong>Username</strong> and <strong>Secrey Key</strong>';
+                break;
+
+                case 404:
+                    message = 'resource not found';
+                break;
+
+                case 500:
+                    message = 'something went wrong with foobot-exporter. Please contact us so we can fix this!'
+                break;
+
+                default:
+                    message = error.statusText || '';
+                break;
+            }
+            errMsg = `${actionMsg}: ${message}`;
+        } else {
+            errMsg = `${actionMsg}: ${error}`;
+        }
+        this.errorEvent.emit(errMsg);
     }
 
 }
